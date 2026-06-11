@@ -9,40 +9,103 @@
 <body>
   <div class="container">
     <h1>🃏 翻牌配对小游戏</h1>
-    
-    <div class="game-info">
-      <div class="info-item">
-        <span class="label">⏱️ 用时</span>
-        <span id="timer" class="value">00:00</span>
-      </div>
-      <div class="info-item">
-        <span class="label">👆 步数</span>
-        <span id="moves" class="value">0</span>
-      </div>
-      <div class="info-item">
-        <span class="label">✅ 已配对</span>
-        <span id="matched" class="value">0/8</span>
+
+    <div id="playerProfileScreen" class="screen">
+      <div class="profile-card">
+        <h2>👤 玩家档案</h2>
+
+        <div class="form-group">
+          <label for="nicknameInput">昵称</label>
+          <input type="text" id="nicknameInput" placeholder="请输入昵称" maxlength="10">
+        </div>
+
+        <div class="form-group">
+          <label>选择头像</label>
+          <div class="avatar-selector" id="avatarSelector">
+            <div class="avatar-option" data-avatar="😀">😀</div>
+            <div class="avatar-option" data-avatar="😎">😎</div>
+            <div class="avatar-option" data-avatar="🤖">🤖</div>
+            <div class="avatar-option" data-avatar="🐱">🐱</div>
+            <div class="avatar-option" data-avatar="🐶">🐶</div>
+            <div class="avatar-option" data-avatar="🦊">🦊</div>
+            <div class="avatar-option" data-avatar="🐼">🐼</div>
+            <div class="avatar-option" data-avatar="🦁">🦁</div>
+            <div class="avatar-option" data-avatar="🐸">🐸</div>
+            <div class="avatar-option" data-avatar="🦄">🦄</div>
+            <div class="avatar-option" data-avatar="👻">👻</div>
+            <div class="avatar-option" data-avatar="🎮">🎮</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>选择难度</label>
+          <div class="difficulty-selector" id="difficultySelector">
+            <div class="difficulty-option" data-difficulty="easy">
+              <span class="diff-label">简单</span>
+              <span class="diff-desc">6对卡片</span>
+            </div>
+            <div class="difficulty-option selected" data-difficulty="medium">
+              <span class="diff-label">中等</span>
+              <span class="diff-desc">8对卡片</span>
+            </div>
+            <div class="difficulty-option" data-difficulty="hard">
+              <span class="diff-label">困难</span>
+              <span class="diff-desc">12对卡片</span>
+            </div>
+          </div>
+        </div>
+
+        <button id="startGameBtn" class="btn btn-primary btn-block">🚀 开始游戏</button>
       </div>
     </div>
 
-    <div class="game-board" id="gameBoard"></div>
+    <div id="gameScreen" class="screen hidden">
+      <div class="player-bar">
+        <div class="player-info">
+          <span class="player-avatar" id="currentPlayerAvatar">😀</span>
+          <span class="player-name" id="currentPlayerName">玩家</span>
+          <span class="player-difficulty" id="currentPlayerDifficulty">中等</span>
+        </div>
+        <button id="changeProfileBtn" class="btn btn-secondary btn-sm">切换玩家</button>
+      </div>
 
-    <div class="controls">
-      <button id="restartBtn" class="btn btn-primary">🔄 重新开始</button>
-      <button id="leaderboardBtn" class="btn btn-secondary">🏆 排行榜</button>
+      <div class="game-info">
+        <div class="info-item">
+          <span class="label">⏱️ 用时</span>
+          <span id="timer" class="value">00:00</span>
+        </div>
+        <div class="info-item">
+          <span class="label">👆 步数</span>
+          <span id="moves" class="value">0</span>
+        </div>
+        <div class="info-item">
+          <span class="label">✅ 已配对</span>
+          <span id="matched" class="value">0/8</span>
+        </div>
+      </div>
+
+      <div class="game-board" id="gameBoard"></div>
+
+      <div class="controls">
+        <button id="restartBtn" class="btn btn-primary">🔄 重新开始</button>
+        <button id="leaderboardBtn" class="btn btn-secondary">🏆 排行榜</button>
+        <button id="historyBtn" class="btn btn-secondary">📜 我的记录</button>
+      </div>
     </div>
 
     <div id="winModal" class="modal hidden">
       <div class="modal-content">
         <h2>🎉 恭喜通关！</h2>
+        <div class="win-player-info">
+          <span class="win-avatar" id="winAvatar">😀</span>
+          <span class="win-name" id="winName">玩家</span>
+        </div>
+        <p>难度：<span id="finalDifficulty">中等</span></p>
         <p>你的成绩：<span id="finalTime">00:00</span></p>
         <p>总步数：<span id="finalMoves">0</span></p>
-        <div class="input-group">
-          <label for="playerName">输入你的名字：</label>
-          <input type="text" id="playerName" placeholder="匿名玩家" maxlength="10">
-        </div>
         <button id="submitScoreBtn" class="btn btn-primary">提交成绩</button>
         <button id="playAgainBtn" class="btn btn-secondary">再玩一次</button>
+        <button id="backToProfileBtn" class="btn btn-secondary">返回档案</button>
       </div>
     </div>
 
@@ -51,6 +114,18 @@
         <h2>🏆 排行榜</h2>
         <ol id="leaderboardList" class="leaderboard-list"></ol>
         <button id="closeLeaderboardBtn" class="btn btn-secondary">关闭</button>
+      </div>
+    </div>
+
+    <div id="historyModal" class="modal hidden">
+      <div class="modal-content">
+        <h2>📜 我的游戏记录</h2>
+        <div class="history-player-info">
+          <span class="history-avatar" id="historyAvatar">😀</span>
+          <span class="history-name" id="historyName">玩家</span>
+        </div>
+        <ol id="historyList" class="history-list"></ol>
+        <button id="closeHistoryBtn" class="btn btn-secondary">关闭</button>
       </div>
     </div>
   </div>
